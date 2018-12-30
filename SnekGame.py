@@ -9,6 +9,7 @@ Main Snek game
 """
 import pygame
 import Snake
+import Camera
 
 # Define some colors
 BLACK = [0, 0, 0]
@@ -17,7 +18,6 @@ GREEN = [0, 255, 0]
 RED = [255, 0, 0]
 
 pygame.init()
-
 screen = pygame.display.set_mode((1250,700))
 SCREEN_WIDTH, SCREEN_HEIGHT = pygame.display.get_surface().get_size()
 clock = pygame.time.Clock()
@@ -25,9 +25,9 @@ clock = pygame.time.Clock()
 
 
 notDone = True
-player = Snake.Snake([int(SCREEN_WIDTH/2), int(SCREEN_HEIGHT/2)], RED, 0, 50  )
-camera_pos = [100, 100]
-world = pygame.Surface((1000,1000))
+player = Snake.Snake([int(SCREEN_WIDTH/2), int(SCREEN_HEIGHT/2)], RED, 0, 1000)
+world = pygame.Surface((int(SCREEN_WIDTH), int(SCREEN_HEIGHT))) 
+camera = Camera.Camera(0, 0, screen.get_size())
         
 while notDone:
     
@@ -48,21 +48,21 @@ while notDone:
     player.activateBoost(keys[pygame.K_SPACE]) 
         
     move_pos = player.updateCoord()
+    camera.move(move_pos)
     
-    camera_pos[0] = move_pos[0] + camera_pos[0] 
-    camera_pos[1] = move_pos[1] + camera_pos[1]
     # Do all the graphics stuff now
     screen.fill(WHITE)
 
     world.fill(BLACK)
-    for x in range(10):
-        pygame.draw.rect(world, GREEN,((x*100,x*100), (20,20)))
+    pygame.draw.rect(world, GREEN,((SCREEN_WIDTH/2,SCREEN_HEIGHT/2), (20,20)))
 
-    screen.blit(world, camera_pos)
+    screen.blit(world, camera.point())
     player.drawSnake(screen)
     pygame.display.flip()
 
-    clock.tick(60)
-    
+    if not keys[pygame.K_r]:
+        clock.tick(120)
+    else: 
+        clock.tick(5)
 pygame.quit()
     
