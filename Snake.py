@@ -1,3 +1,12 @@
+"""
+Created on Tue Dec 25 12:19:23 2018
+
+Main Snek game
+
+@author: Ravi Ghaghada
+
+"""
+
 import pygame
 import math
 
